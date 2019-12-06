@@ -18,7 +18,10 @@ The goals / steps of this project are the following:
 
 [//]: # (Image References)
 
-[image1]: ./OutData4/IMG/center_2019_12_05_20_01_26_369.jpg "Training data sample center camera"
+[image1]: ./writeup_resources/NVIDIA-PilotNet-architecture.png "Nvidia PilotNet architecture"
+[image2]: ./OutData4/IMG/center_2019_12_05_20_01_26_369.jpg "Training data sample center camera"
+[image3]: ./OutData4/IMG/left_2019_12_05_20_01_26_369.jpg "Training data sample left camera"
+[image4]: ./OutData4/IMG/right_2019_12_05_20_01_26_369.jpg "Training data sample right camera"
 
 ## Rubric Points
 ### Here I will consider the [rubric points](https://review.udacity.com/#!/rubrics/432/view) individually and describe how I addressed each point in my implementation.  
@@ -48,7 +51,11 @@ The model.py file contains the code for training and saving the convolution neur
 
 #### 1. An appropriate model architecture has been employed
 
-The architecture used was the one suggested by Nvidia but with added MaxPooling, Dropout and RELU activation layers:
+The architecture used was the one suggested by Nvidia:
+
+![alt text][image1]
+
+The final architecture contains MaxPooling, Dropout and RELU activation layers:
 
 | Layer         		|     Description	        					| 
 |:---------------------:|:---------------------------------------------:| 
@@ -120,7 +127,11 @@ The final model architecture (model.py lines 95-114) consisted of a convolution 
 
 To capture good driving behavior, I first recorded two laps on track one using center lane driving. Here is an example image of center lane driving:
 
-![alt text][image1]
+![alt text][image2]
+
+The left and right camera images follow:
+
+![alt text][image3]![alt text][image4]
 
 After two laps of recording a third lap was done but only with the more difficult curves recorded.
 
