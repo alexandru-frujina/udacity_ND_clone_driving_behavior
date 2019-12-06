@@ -1,33 +1,36 @@
 from keras.models import Sequential
 from keras.layers import Flatten, Dense, Lambda, Cropping2D, Convolution2D, Dropout, MaxPooling2D, Activation
 from math import ceil
-
 import os
 import csv
-
-samples = []
-
-with open('./OutData4/driving_log.csv') as csvfile:
-    reader = csv.reader(csvfile)
-    for line in reader:
-        samples.append(line)
-        
 from sklearn.model_selection import train_test_split
-train_samples, validation_samples = train_test_split(samples, test_size=0.2)
-
 import cv2
 import numpy as np
 import sklearn
 from sklearn.utils import shuffle
 
+samples = []
+
+# Load the training data
+with open('./OutData4/driving_log.csv') as csvfile:
+    reader = csv.reader(csvfile)
+    for line in reader:
+        samples.append(line)
+
+train_samples, validation_samples = train_test_split(samples, test_size=0.2)
+
+# Configure adding flipped image data for training
 addFlipped = True
 
+# Function to flip both the image on the vertical axis and negate the angle
 def flipData(image, angle):
     image_flipped = np.fliplr(image)
     angle_flipped = -angle
 
     return image_flipped, angle_flipped
 
+
+# Extracts images
 def generator(samples, batch_size=32):
     num_samples = len(samples)
     while 1: # Loop forever so the generator never terminates
@@ -44,16 +47,16 @@ def generator(samples, batch_size=32):
                 images.append(center_image)
                 angles.append(center_angle)
                 
-                # create adjusted steering measurements for the side camera images
+                # Create adjusted steering measurements for the side camera images
                 correction = 0.2 # this is a parameter to tune
                 steering_left = center_angle + correction
                 steering_right = center_angle - correction
 
-                # read in images from center, left and right cameras
-                img_left = cv2.imread('./' + batch_sample[1].split('/')[-3] + '/IMG/'+batch_sample[1].split('/')[-1])
-                img_right = cv2.imread('./' + batch_sample[2].split('/')[-3] + '/IMG/'+batch_sample[2].split('/')[-1])
+                # Read in images from center, left and right cameras
+                img_left = cv2.imread('./' + batch_sample[1].split('/')[-3] + '/IMG/'+ batch_sample[1].split('/')[-1])
+                img_right = cv2.imread('./' + batch_sample[2].split('/')[-3] + '/IMG/'+ batch_sample[2].split('/')[-1])
                 
-                # add images and angles to data set
+                # Add images and angles to data set
                 images.append(img_left)
                 images.append(img_right)
                 angles.append(steering_left)
@@ -72,8 +75,6 @@ def generator(samples, batch_size=32):
                     images.append(image_flipped)
                     angles.append(angle_flipped)
                     
-
-            # trim image to only see section with road
             X_train = np.array(images)
             y_train = np.array(angles)
 
@@ -82,10 +83,11 @@ def generator(samples, batch_size=32):
 # Set our batch size
 batch_size=32
 
-# compile and train the model using the generator function
+# Compile and train the model using the generator function
 train_generator = generator(train_samples, batch_size=batch_size)
 validation_generator = generator(validation_samples, batch_size=batch_size)
 
+# Cropping 50 pixels from the top if the image and 20 from the bottom: 160 - 50 - 20 = 90
 ch, row, col = 3, 90, 320  # Trimmed image format
 
 model = Sequential()
