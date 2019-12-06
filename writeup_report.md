@@ -141,4 +141,4 @@ After the collection process, I had 4460 * 3 number images (4460 of each left, c
 
 I finally randomly shuffled the data set and put 20% of the data into a validation set. 
 
-I used this training data for training the model. The validation set helped determine if the model was over or under fitting. The ideal number of epochs was 3 as evidenced by the fact that the car drives worse when increasing the number of epochs.
+I used this training data for training the model. The validation set helped determine if the model was over or under fitting. The ideal number of epochs was 5 as evidenced by the fact that the car drives worse when increasing the number of epochs.
